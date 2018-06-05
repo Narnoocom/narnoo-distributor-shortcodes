@@ -10,11 +10,8 @@ extract( shortcode_atts( array(
 ), $atts ) );
 
 
-if(empty($album)){
+if(empty($album) && empty($operator)){
 	echo $error_msg_prefix . __( 'An album key is required', NARNOO_DISTRIBUTOR_SHORTCODE_I18N_DOMAIN );
-}
-if(empty($album)){
-	echo $error_msg_prefix . __( 'An operator id is required', NARNOO_DISTRIBUTOR_SHORTCODE_I18N_DOMAIN );
 }
 
 $list 			= null;
@@ -31,11 +28,30 @@ if ( ! is_null( $request ) ) {
 	if(empty($list)){
 
 		try {
-			$list = $request->getAlbumImages( $operator, $album, $current_page );
 
-			if ( ! is_array( $list->operator_albums_images ) ) {
-				throw new Exception( sprintf( __( "Error retrieving album images. Unexpected format in response page #%d.", NARNOO_DISTRIBUTOR_SHORTCODE_I18N_DOMAIN ), $current_page ) );
+			if(!empty($album) && !empty($operator)){
+				$list = $request->getAlbumImages( $operator, $album, $current_page );
+
+				if ( ! is_array( $list->operator_albums_images ) ) {
+					throw new Exception( sprintf( __( "Error retrieving album images. Unexpected format in response page #%d.", NARNOO_DISTRIBUTOR_SHORTCODE_I18N_DOMAIN ), $current_page ) );
+				}
+
+				$galleryImages = $list->operator_albums_images;
+			
+			}else{
+			
+				 $list = $request->getImages( $operator );
+
+				 if ( ! is_array( $list->operator_images ) ) {
+					throw new Exception( sprintf( __( "Error retrieving album images. Unexpected format in response page #%d.", NARNOO_DISTRIBUTOR_SHORTCODE_I18N_DOMAIN ), $current_page ) );
+				 }
+			
+				 $galleryImages = $list->operator_images;
+			
 			}
+			
+
+			
 
 			if(!empty( $list->success ) ){
 				//$cache->set('album_'.$album.$current_page, $list, 43200);
@@ -66,9 +82,9 @@ if ( ! is_null( $request ) ) {
 
     <div class="cycle-slideshow" data-cycle-fx=fadeout data-cycle-timeout=<?php echo $speed; ?> style="position: relative;">
         <?php
-				shuffle($list->operator_albums_images);
+				shuffle($galleryImages);
 				$a=0;
-        foreach ($list->operator_albums_images as $img) {
+        foreach ($galleryImages as $img) {
 					if($a <= $number){
 						echo '<img class="slide" src="'.$img->xlarge_image_path.'" >';
 					}

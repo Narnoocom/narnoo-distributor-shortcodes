@@ -3,13 +3,13 @@
 Plugin Name: Narnoo Shortcodes
 Plugin URI: http://narnoo.com/
 Description: Allows Wordpress users to display their Narnoo media on their Wordpress site. You will need the Narnoo Distributor Plugin to activate this plugin.
-Version: 2.0.0
+Version: 2.0.5
 Author: Narnoo Wordpress developer
 Author URI: http://www.narnoo.com/
 License: GPL2 or later
 */
 
-/*  Copyright 2016  Narnoo.com  (email : info@narnoo.com)
+/*  Copyright 2018  Narnoo.com  (email : info@narnoo.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License, version 2, as
@@ -26,7 +26,7 @@ License: GPL2 or later
 */
 // plugin definitions
 define( 'NARNOO_DISTRIBUTOR_SHORTCODE_PLUGIN_NAME', 'Narnoo Shortcodes' );
-define( 'NARNOO_DISTRIBUTOR_SHORTCODE_CURRENT_VERSION', '1.0.0' );
+define( 'NARNOO_DISTRIBUTOR_SHORTCODE_CURRENT_VERSION', '2.0.5' );
 define( 'NARNOO_DISTRIBUTOR_SHORTCODE_I18N_DOMAIN', 'narnoo-shortcodes' );
 
 define( 'NARNOO_DISTRIBUTOR_SHORTCODE_URL', plugin_dir_url( __FILE__ ) );
@@ -49,12 +49,12 @@ class Narnoo_Shortcodes {
 
 		}else{
 
-			//add_shortcode( 'narnoo_gallery', 			array( &$this, 'narnoo_distributor_gallery_shortcode' ) );
+			add_shortcode( 'narnoo_gallery', 							array( &$this, 'narnoo_distributor_gallery_shortcode' ) );
 			add_shortcode( 'narnoo_gallery_slider', 					array( &$this, 'narnoo_distributor_slider_shortcode' ) );
 			add_shortcode( 'narnoo_operator_gallery_slider', 			array( &$this, 'narnoo_operator_slider_shortcode' ) );
-			//add_shortcode( 'narnoo_single_gallery', 	array( &$this, 'narnoo_single_gallery_shortcode' ) );
+			add_shortcode( 'narnoo_single_gallery', 					array( &$this, 'narnoo_single_gallery_shortcode' ) );
 			add_shortcode( 'narnoo_flip_book', 							array( &$this, 'narnoo_flip_book_shortcode' ) );
-			//add_shortcode( 'narnoo_video_player', 		array( &$this, 'narnoo_video_player_shortcode' ) );
+			add_shortcode( 'narnoo_video_player', 						array( &$this, 'narnoo_video_player_shortcode' ) );
 			//add_shortcode( 'narnoo_products', 			array( &$this, 'narnoo_products_shortcode' ) );
 			//add_shortcode( 'narnoo_tripadvisor', 		array( &$this, 'narnoo_tripadvisor_shortcode' ) );
 
@@ -95,15 +95,15 @@ class Narnoo_Shortcodes {
 
 	/*
 	 * Display specified brochure with thumbnail or preview image, link to PDF file and caption.
-	 *
-	function narnoo_DISTRIBUTOR_gallery_shortcode( $atts ) {
+	 */
+	function narnoo_distributor_gallery_shortcode( $atts ) {
 		ob_start();
 		require( NARNOO_DISTRIBUTOR_SHORTCODE_PLUGIN_PATH . 'libs/narnoo_gallery/gallery.php' );
 		return ob_get_clean();
 	}
 	/*
 	 * Loads Javascript files for tiles gallery shortcode.
-	 *
+	 */
 	static function load_scripts_for_image_gallery() {
 		// register custom names and dependencies for the common scripts which are to be loaded only once per page with shortcode(s)
 		wp_register_script( 'narnoo.jquery.lightslidermaster', plugins_url( 'libs/narnoo_gallery/js/lightslider.min.js', __FILE__ ), array( 'jquery' ) );
@@ -154,7 +154,7 @@ class Narnoo_Shortcodes {
 
 	/*
 	 * Display specified brochure with thumbnail or preview image, link to PDF file and caption.
-	 *
+	 */
 	function narnoo_single_gallery_shortcode( $atts ) {
 		ob_start();
 		require( NARNOO_DISTRIBUTOR_SHORTCODE_PLUGIN_PATH . 'libs/narnoo_single_gallery/single_gallery.php' );
@@ -162,7 +162,7 @@ class Narnoo_Shortcodes {
 	}
 	/*
 	 * Loads Javascript files for tiles gallery shortcode.
-	 *
+	 */
 	static function load_scripts_for_single_gallery() {
 		// register custom names and dependencies for the common scripts which are to be loaded only once per page with shortcode(s)
 		wp_register_script( 'narnoo.js.single', plugins_url( 'libs/narnoo_single_gallery/imagebox/imagebox.min.js', __FILE__ ), array( 'jquery' ) );
@@ -172,6 +172,7 @@ class Narnoo_Shortcodes {
 		// load the common scripts
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'narnoo.js.single' );
+		wp_enqueue_script( 'narnoo.js.script' );
 		wp_enqueue_style( 'narnoo.css.single' );
 
 
@@ -222,7 +223,7 @@ class Narnoo_Shortcodes {
 
 	/*
 	 * Display specified video player.
-	 *
+	 */
 	function narnoo_video_player_shortcode( $atts ) {
 		ob_start();
 		require( NARNOO_DISTRIBUTOR_SHORTCODE_PLUGIN_PATH . 'libs/narnoo_video_player/player.php' );
